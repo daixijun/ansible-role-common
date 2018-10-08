@@ -26,7 +26,7 @@
 
 - name: Ensure selinux disabled
   selinux:
-    state: diabled
+    state: disabled
   register: selinux_stat
 
 - name: Reboot if selinux need
