@@ -1,2 +1,4 @@
 ---
-# handlers file for common
+- name: apply sysctl
+  command: sysctl -p
+  ignore_errors: true

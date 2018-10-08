@@ -25,6 +25,16 @@
   tags:
     - timezone
 
+- name: Setting sysctl.conf
+  copy:
+    src: sysctl.conf
+    dest: /etc/sysctl.conf
+    backup: true
+  tags:
+    - sysctl
+  notify:
+    - apply sysctl
+
 - name: Install libselinux-python
   yum:
     name: libselinux-python
