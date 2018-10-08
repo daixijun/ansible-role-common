@@ -5,6 +5,8 @@
     state: latest
     update_cache: yes
   when: common_upgrade_system | bool == True
+  tags:
+    - upgrade_system
 
 - name: Ensure firewalld disabled
   systemd:
@@ -12,22 +14,30 @@
     state: stopped
     enabled: false
     daemon_reload: yes
+  tags:
+    - firewalld
 
 - name: Ensure timezone is Asia/Shanghai
   file:
     src: /usr/share/zoneinfo/Asia/Shanghai
     dest: /etc/localtime
     state: link
+  tags:
+    - timezone
 
 - name: Install libselinux-python
   yum:
     name: libselinux-python
     state: installed
+  tags:
+    - selinux
 
 - name: Ensure selinux disabled
   selinux:
     state: disabled
   register: se
+  tags:
+    - selinux
 
 - name: Reboot if selinux needed
   shell: sleep 2 && shutdown -r now "reboot for disable selinux"
