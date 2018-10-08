@@ -48,19 +48,5 @@
   register: se
   tags:
     - selinux
-
-- name: Reboot if selinux needed
-  shell: sleep 2 && shutdown -r now "reboot for disable selinux"
-  async: 1
-  poll: 0
-  ignore_errors: yes
-  when: se.reboot_required
-  tags:
-    - reboot
-
-- name: Waitting for reconnecting
-  wait_for_connection:
-    dalay: 5
-  when: se.reboot_required | bool == True
-  tags:
+  notify:
     - reboot

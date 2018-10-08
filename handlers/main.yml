@@ -2,3 +2,17 @@
 - name: apply sysctl
   command: sysctl -p
   ignore_errors: true
+
+- name: Reboot if selinux needed
+  shell: sleep 2 && shutdown -r now "reboot for disable selinux"
+  async: 1
+  poll: 0
+  ignore_errors: yes
+  listen: reboot
+  when: se.reboot_required
+
+- name: Waitting for reconnecting
+  wait_for_connection:
+    dalay: 5
+  listen: reboot
+  when: se.reboot_required | bool == True
