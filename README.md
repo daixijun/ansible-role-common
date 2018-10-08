@@ -1,5 +1,6 @@
 Ansible Role: common
 =========
+[![Build Status](https://travis-ci.org/daixijun/ansible-role-common.svg?branch=master)](https://travis-ci.org/daixijun/ansible-role-common)
 
 system initialization
 
