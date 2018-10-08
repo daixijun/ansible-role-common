@@ -1,4 +1,5 @@
 galaxy_info:
+  role_name: common
   author: Xijun Dai
   description: system initialization
   company: verystar
