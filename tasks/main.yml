@@ -1,0 +1,44 @@
+---
+- name: Upgrade system
+  yum:
+    name: "*"
+    state: latest
+    update_cache: yes
+  when: common_upgrade_system | bool == True
+
+- name: Ensure firewalld disabled
+  systemd:
+    name: firewalld.service
+    state: disabled
+    enabled: false
+    daemon_reload: yes
+
+- name: Ensure timezone is Asia/Shanghai
+  file:
+    src: /usr/share/zoneinfo/Asia/Shanghai
+    dest: /etc/localtime
+    state: link
+
+- name: Install libselinux-python
+  yum:
+    name: libselinux-python
+    state: installed
+
+- name: Ensure selinux disabled
+  selinux:
+    state: diabled
+  register: selinux_stat
+
+- name: Reboot if selinux need
+  shell: "sleep 2 && reboot"
+  async: 1
+  poll: 0
+  when: selinux_stat.reboot_required
+
+- name: Waitting for reboot
+  wait_for:
+    host: "{{ inventory_hostname }}"
+    port: 22
+    state: started
+  delegate_to: localhost
+  when: selinux_stat.reboot_required
