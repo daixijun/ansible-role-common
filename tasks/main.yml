@@ -27,18 +27,20 @@
 - name: Ensure selinux disabled
   selinux:
     state: disabled
-  register: selinux_stat
+  register: se
 
-- name: Reboot if selinux need
-  shell: "sleep 2 && reboot"
+- name: Reboot if selinux needed
+  shell: sleep 2 && shutdown -r now "reboot for disable selinux"
   async: 1
   poll: 0
-  when: selinux_stat.reboot_required
+  ignore_errors: yes
+  when: se.reboot_required
+  tags:
+    - reboot
 
-- name: Waitting for reboot
-  wait_for:
-    host: "{{ inventory_hostname }}"
-    port: 22
-    state: started
-  delegate_to: localhost
-  when: selinux_stat.reboot_required
+- name: Waitting for reconnecting
+  wait_for_connection:
+    dalay: 5
+  when: se.reboot_required | bool == True
+  tags:
+    - reboot
