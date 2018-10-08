@@ -9,7 +9,7 @@
 - name: Ensure firewalld disabled
   systemd:
     name: firewalld.service
-    state: disabled
+    state: stopped
     enabled: false
     daemon_reload: yes
 
