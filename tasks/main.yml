@@ -8,6 +8,14 @@
   tags:
     - upgrade_system
 
+- name: Install epel-release
+  yum:
+    name: epel-release
+    state: present
+    update_cache: yes
+  tags:
+    - always
+
 - name: Ensure firewalld disabled
   systemd:
     name: firewalld.service
